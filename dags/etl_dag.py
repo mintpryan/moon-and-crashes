@@ -12,7 +12,7 @@ MOON_DATA_FILE='/moon_phases.csv'
 CRASHES_DATA_FILE='/crashes_data.csv'
 TRANSFORMED_DATA_FILE = "/transformed_data.csv"
 START_DATE = Variable.get("start_date", default_var="2024-01-01")
-END_DATE = Variable.get("end_date", default_var="2024-02-01")
+END_DATE = Variable.get("end_date", default_var="2024-12-01")
 
 # Определение аргументов по умолчанию для DAG
 default_args = {
@@ -21,7 +21,7 @@ default_args = {
     'email_on_failure': False,
     'email_on_retry': False,
     'retries': 1,
-    'retry_delay': timedelta(minutes=5),
+    'retry_delay': timedelta(minutes=1),
 }
 
 # Определение DAG

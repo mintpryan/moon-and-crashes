@@ -2,14 +2,14 @@ import requests
 import pandas as pd
 import datetime
 import ephem
-from config.settings import BASE_URL
+import logging
 
-
+BASE_URL = 'https://data.cityofnewyork.us/resource/h9gi-nx95.json'
 BATCH_SIZE = 1000
 def fetch_crash_data(start_date: datetime.datetime, end_date: datetime.datetime,output_file:str):
     str_start_date = start_date.isoformat()
     str_end_date = end_date.isoformat()
-
+    logging.info(f"Start extract from {str_start_date} to {str_end_date}!")
     offset = 0
     all_data = []
     while True:
@@ -22,6 +22,7 @@ def fetch_crash_data(start_date: datetime.datetime, end_date: datetime.datetime,
                 break
             all_data.extend(data)
             offset += BATCH_SIZE
+            logging.info("Add new data for!")
         else:
             raise Exception(f"Error fetching data: {response.status_code} - {response.text}")
 

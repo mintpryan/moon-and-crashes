@@ -2,4 +2,4 @@ pandas==2.2.3
 requests==2.32.3
 ephem==4.1.6
 psycopg2-binary==2.9.10
-python-dotenv==1.0.0
+python-dotenv==1.0.1
