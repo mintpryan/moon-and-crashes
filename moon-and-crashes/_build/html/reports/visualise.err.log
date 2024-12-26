@@ -37,8 +37,8 @@ nbclient.exceptions.CellTimeoutError: A cell timed out while it was being execut
 The message was: Cell execution timed out.
 Here is a preview of the cell contents:
 -------------------
-['import pandas as pd', 'import matplotlib.pyplot as plt', 'import seaborn as sns', 'import plotly.express as px', '']
+['# Импорт библиотек', 'import pandas as pd', 'import matplotlib.pyplot as plt', 'import seaborn as sns', 'import plotly.express as px']
 ...
-['data = {', '    "Category": ["A", "B", "C", "D"],', '    "Values": [10, 20, 15, 25]', '}', 'df = pd.DataFrame(data)']
+['    "Категория": ["A", "B", "C", "D"],', '    "Значение": [10, 20, 15, 25]', '}', 'df = pd.DataFrame(data)', 'df']
 -------------------
 
