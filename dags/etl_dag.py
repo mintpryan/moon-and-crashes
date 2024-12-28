@@ -3,7 +3,7 @@ from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
 from etl.extract import fetch_crash_data,generate_moon_phases
 from etl.transform import transform_data
-from etl.load import load_to_postgres
+from etl.load import load_to_postgres,visualise
 from airflow.models import Variable
 
 # Константы
@@ -11,6 +11,7 @@ WORK_DIR = "/tmp"
 MOON_DATA_FILE='/moon_phases.csv'
 CRASHES_DATA_FILE='/crashes_data.csv'
 TRANSFORMED_DATA_FILE = "/transformed_data.csv"
+GRAPH_HTML = "/output_graph.html"
 START_DATE = Variable.get("start_date", default_var="2024-01-01")
 END_DATE = Variable.get("end_date", default_var="2024-12-01")
 
@@ -24,7 +25,6 @@ default_args = {
     'retry_delay': timedelta(minutes=1),
 }
 
-# Определение DAG
 with DAG(
     'nyc_crash_analysis',
     default_args=default_args,
@@ -54,7 +54,6 @@ with DAG(
         },
     )
 
-    # Задача: Transform
     transform_task = PythonOperator(
         task_id='transform_crash_data',
         python_callable=transform_data,
@@ -65,7 +64,6 @@ with DAG(
         },
     )
 
-    # Задача: Load
     load_task = PythonOperator(
         task_id='load_crash_data',
         python_callable=load_to_postgres,
@@ -73,6 +71,14 @@ with DAG(
             'file_path': WORK_DIR+TRANSFORMED_DATA_FILE,
         },
     )
+    
+    visualise = PythonOperator(
+        task_id='visualise',
+        python_callable=visualise,
+        op_kwargs={
+            'file_path': WORK_DIR+TRANSFORMED_DATA_FILE,
+            'output_file':WORK_DIR+GRAPH_HTML
+        },
+    )
 
-    # Определение последовательности задач
-    [extract_crashes_task, extract_moon_phases_task] >> transform_task >> load_task
+    [extract_crashes_task, extract_moon_phases_task] >> transform_task >> [load_task,visualise]

@@ -35,3 +35,4 @@ def transform_data(crash_file, moon_file,output_file):
     merged["moon_phase_category"] = merged["moon_phase"].apply(classify_phase)
 
     merged.to_csv(output_file, index=False)
+

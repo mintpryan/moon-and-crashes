@@ -43,3 +43,5 @@ def generate_moon_phases(start_date: datetime.date, end_date: datetime.date,outp
 
     df = pd.DataFrame(phases)
     df.to_csv(output_file, index=False)
+    
+    
