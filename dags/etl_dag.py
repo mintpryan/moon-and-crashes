@@ -1,4 +1,5 @@
 from airflow import DAG
+from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
 from etl.extract import fetch_crash_data,generate_moon_phases
@@ -33,6 +34,9 @@ with DAG(
     start_date=datetime(2024, 1, 1),
     catchup=False,
 ) as dag:
+    
+    begin = DummyOperator(task_id="begin")
+    end = DummyOperator(task_id="end")
 
     extract_crashes_task = PythonOperator(
         task_id='extract_crash_data',
@@ -81,4 +85,4 @@ with DAG(
         },
     )
 
-    [extract_crashes_task, extract_moon_phases_task] >> transform_task >> [load_task,visualise]
+    begin >> [extract_crashes_task, extract_moon_phases_task] >> transform_task >> [load_task,visualise] >> end
